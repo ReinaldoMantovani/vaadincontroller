@@ -69,15 +69,16 @@ public class UsuariosView  extends Div{
 	        
 	        Grid<UsuariosDto> grid = new Grid<>(UsuariosDto.class, false);
 	        grid.setSelectionMode(Grid.SelectionMode.MULTI);
-	        grid.addColumn(UsuariosDto::getId).setHeader("Id");
-	        grid.addColumn(UsuariosDto::getNome).setHeader("Nome");
-	        grid.addColumn(UsuariosDto::getSobrenome).setHeader("Sobrenome");
-	        grid.addColumn(UsuariosDto::getCpf).setHeader("Cpf");
-	        grid.addColumn(UsuariosDto::getRg).setHeader("Rg");
-	        grid.addColumn(UsuariosDto::getTipoEmitente).setHeader("Tipo Emitente");
-	        grid.addColumn(UsuariosDto::getMomentoRegistro).setHeader("Momento Registro");
-	        grid.addColumn(UsuariosDto::getCidade).setHeader("Cidade");
-	        grid.addColumn(createStatusComponentRenderer()).setHeader("Status")
+	        grid.addColumn(UsuariosDto::getId).setHeader("Id").setSortable(true);
+	        grid.addColumn(UsuariosDto::getNome).setHeader("Nome").setSortable(true);
+	        grid.addColumn(UsuariosDto::getSobrenome).setHeader("Sobrenome").setSortable(true);
+	        grid.addColumn(UsuariosDto::getCpf).setHeader("CPF").setSortable(true);
+	        grid.addColumn(UsuariosDto::getRg).setHeader("RG").setSortable(true);
+	        grid.addColumn(UsuariosDto::getTipoEmitente).setHeader("Tipo Emitente").setSortable(true);
+	        grid.addColumn(UsuariosDto::getCidade).setHeader("Cidade").setSortable(true);;
+	        grid.addColumn(UsuariosDto::getMomentoRegistro).setHeader("Registro").setSortable(true);
+			grid.addColumn(UsuariosDto::getUpdateRegistro).setHeader("Alteração").setSortable(true);
+	        grid.addColumn(createStatusComponentRenderer()).setHeader("Status").setSortable(true)
 	                .setAutoWidth(true);
 
 	        
@@ -95,9 +96,10 @@ public class UsuariosView  extends Div{
 
 	private static final SerializableBiConsumer<Span, UsuariosDto> statusComponentUpdater = (
 			span, person) -> {
-		boolean isAvailable = "Available".equals(person.getStatusUsuario().toString());
+		// Verifica o status do usuário e define se está ativo ou bloqueado
+		boolean isActive = "Ativo".equals(person.getStatusUsuario().toString());
 		String theme = String.format("badge %s",
-				isAvailable ? "success" : "error");
+				isActive ? "success" : "error");
 		span.getElement().setAttribute("theme", theme);
 		span.setText(person.getStatusUsuario().toString());
 	};

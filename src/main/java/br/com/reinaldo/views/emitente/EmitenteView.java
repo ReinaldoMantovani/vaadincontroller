@@ -71,8 +71,8 @@ public class EmitenteView extends VerticalLayout {
 	        grid.addColumn(UsuariosDto::getStatusUsuario).setHeader("Status");
 
 	        List<UsuariosDto> usuarios = usuariosService.getAllUsuarios();
-			grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 	        grid.setItems(usuarios);
+			grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 
 
 	        grid.addSelectionListener(selection -> {

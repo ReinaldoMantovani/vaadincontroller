@@ -43,10 +43,10 @@ public class Usuarios implements Serializable{
 	private Cidade cidade;
 	@NotNull
 	@Column(unique = true)
-	private BigDecimal cpf;
+	private String cpf;
 	@NotNull
 	@Column(unique = true)
-	private BigDecimal rg;
+	private String rg;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
 	@CreationTimestamp
@@ -72,8 +72,8 @@ public class Usuarios implements Serializable{
 	public Usuarios() {
 	}
 
-	public Usuarios(Long id, String nome, String sobrenome, StatusUsuario statusUsuario, Cidade cidade, BigDecimal cpf,
-			BigDecimal rg, Date momentoRegistro, Date updateRegistro ,TipoEmitenteEnum tipoEmitente) {
+	public Usuarios(Long id, String nome, String sobrenome, StatusUsuario statusUsuario, Cidade cidade, String cpf,
+					String rg, Date momentoRegistro, Date updateRegistro ,TipoEmitenteEnum tipoEmitente) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -134,19 +134,19 @@ public class Usuarios implements Serializable{
 		this.cidade = cidade;
 	}
 
-	public BigDecimal getCpf() {
+	public String getCpf() {
 		return cpf;
 	}
 
-	public void setCpf(BigDecimal cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 
-	public BigDecimal getRg() {
+	public String getRg() {
 		return rg;
 	}
 
-	public void setRg(BigDecimal rg) {
+	public void setRg(String rg) {
 		this.rg = rg;
 	}
 

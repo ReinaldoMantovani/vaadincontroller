@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
@@ -64,15 +65,16 @@ public class CidadeView  extends Div{
 	        
 	        Grid<CidadeDto> grid = new Grid<>(CidadeDto.class, false);
 	        grid.setSelectionMode(Grid.SelectionMode.MULTI);
-	        grid.addColumn(CidadeDto::getId).setHeader("Id");
-	        grid.addColumn(CidadeDto::getNome).setHeader("Nome");
-	        grid.addColumn(CidadeDto::getCodigoIbge).setHeader("CodigoIbge");
-	        grid.addColumn(CidadeDto::getUf).setHeader("Uf");
-	        grid.addColumn(CidadeDto::getMomentoRegistro).setHeader("MomentoRegistro");
+	        grid.addColumn(CidadeDto::getId).setHeader("Id").setSortable(true);
+	        grid.addColumn(CidadeDto::getNome).setHeader("Nome").setSortable(true);
+	        grid.addColumn(CidadeDto::getCodigoIbge).setHeader("CodigoIbge").setSortable(true);
+	        grid.addColumn(CidadeDto::getUf).setHeader("Uf").setSortable(true);
+	        grid.addColumn(CidadeDto::getMomentoRegistro).setHeader("MomentoRegistro").setSortable(true);
 	        
 	       
 			List<CidadeDto> cidades = cidadeService.getAllCidades();
 	        grid.setItems(cidades);
+			grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 	        
 	        vert.add(grid);
 	        add(search,horizontalLayout,vert);

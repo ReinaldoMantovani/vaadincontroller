@@ -19,8 +19,8 @@ public class UsuariosDto {
 	private String sobrenome;
 	private StatusUsuario statusUsuario;
 	private Cidade cidade;
-	private BigDecimal cpf;
-	private BigDecimal rg;
+	private String cpf;
+	private String rg;
 	private Date momentoRegistro;
 	private Date updateRegistro;
 	private TipoEmitenteEnum tipoEmitente;
@@ -28,8 +28,8 @@ public class UsuariosDto {
 	public UsuariosDto() {
 	}
 
-	public UsuariosDto(Long id, String nome, String sobrenome, StatusUsuario statusUsuario, Cidade cidade, BigDecimal cpf,
-			BigDecimal rg, Date momentoRegistro, Date updateRegistro ,TipoEmitenteEnum tipoEmitente) {
+	public UsuariosDto(Long id, String nome, String sobrenome, StatusUsuario statusUsuario, Cidade cidade, String cpf,
+					   String rg, Date momentoRegistro, Date updateRegistro ,TipoEmitenteEnum tipoEmitente) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -88,19 +88,19 @@ public class UsuariosDto {
 		this.cidade = cidade;
 	}
 
-	public BigDecimal getCpf() {
+	public String getCpf() {
 		return cpf;
 	}
 
-	public void setCpf(BigDecimal cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 
-	public BigDecimal getRg() {
+	public String getRg() {
 		return rg;
 	}
 
-	public void setRg(BigDecimal rg) {
+	public void setRg(String rg) {
 		this.rg = rg;
 	}
 
