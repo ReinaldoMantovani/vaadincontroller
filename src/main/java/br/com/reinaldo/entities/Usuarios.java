@@ -1,24 +1,20 @@
 package br.com.reinaldo.entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
 import br.com.reinaldo.enums.StatusUsuario;
 import br.com.reinaldo.enums.TipoEmitenteEnum;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.grammars.hql.HqlParser;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
+
 
 @Entity
 @Table(name = "tb_usuarios")
@@ -28,22 +24,39 @@ public class Usuarios implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@NotNull
 	@Column
 	private String nome;
+
 	@NotNull
 	@Column
 	private String sobrenome;
+
+	@NotNull(message = "Username deve ser informado.")
+	private String username;
+
+	@Email(message = "Coloque um email valido!")
+	@Column(unique = true)
+	private String email;
+
+	@NotNull(message = "A senha ´´e obrigatória")
+	@Column(unique = true)
+	private String password;
+
 	@NotNull(message = "O status do usuário deve ser informado.")
 	@Column
 	private StatusUsuario statusUsuario;
+
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.PERSIST) // ou CascadeType.ALL
 	@JoinColumn(name = "cidade_id")
 	private Cidade cidade;
+
 	@NotNull
 	@Column(unique = true)
 	private String cpf;
+
 	@NotNull
 	@Column(unique = true)
 	private String rg;
@@ -59,6 +72,9 @@ public class Usuarios implements Serializable{
 	@Enumerated(EnumType.STRING)
 	private TipoEmitenteEnum tipoEmitente;
 
+	@Column
+	private String profileImageUrl;
+
 	@PrePersist
 	protected  void onCreate(){
 		this.momentoRegistro = new Date();
@@ -72,26 +88,22 @@ public class Usuarios implements Serializable{
 	public Usuarios() {
 	}
 
-	public Usuarios(Long id, String nome, String sobrenome, StatusUsuario statusUsuario, Cidade cidade, String cpf,
-					String rg, Date momentoRegistro, Date updateRegistro ,TipoEmitenteEnum tipoEmitente) {
-		super();
+	public Usuarios(Long id, String profileImageUrl, TipoEmitenteEnum tipoEmitente, Date updateRegistro, Date momentoRegistro, String rg,
+					String cpf, Cidade cidade, StatusUsuario statusUsuario, String password, String email, String username, String sobrenome, String nome) {
 		this.id = id;
-		this.nome = nome;
-		this.sobrenome = sobrenome;
-		this.statusUsuario = statusUsuario;
-		this.cidade = cidade;
-		this.cpf = cpf;
-		this.rg = rg;
-		this.momentoRegistro = momentoRegistro;
-		this.updateRegistro = updateRegistro;
+		this.profileImageUrl = profileImageUrl;
 		this.tipoEmitente = tipoEmitente;
-	}
-
-
-
-	@Override
-	public String toString() {
-		return tipoEmitente.toString();
+		this.updateRegistro = updateRegistro;
+		this.momentoRegistro = momentoRegistro;
+		this.rg = rg;
+		this.cpf = cpf;
+		this.cidade = cidade;
+		this.statusUsuario = statusUsuario;
+		this.password = password;
+		this.email = email;
+		this.username = username;
+		this.sobrenome = sobrenome;
+		this.nome = nome;
 	}
 
 	public Long getId() {
@@ -102,28 +114,44 @@ public class Usuarios implements Serializable{
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getProfileImageUrl() {
+		return profileImageUrl;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setProfileImageUrl(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
 	}
 
-	public String getSobrenome() {
-		return sobrenome;
+	public TipoEmitenteEnum getTipoEmitente() {
+		return tipoEmitente;
 	}
 
-	public void setSobrenome(String sobrenome) {
-		this.sobrenome = sobrenome;
+	public void setTipoEmitente(TipoEmitenteEnum tipoEmitente) {
+		this.tipoEmitente = tipoEmitente;
 	}
 
-	public StatusUsuario getStatusUsuario() {
-		return statusUsuario;
+	public Date getUpdateRegistro() {
+		return updateRegistro;
 	}
 
-	public void setStatusUsuario(StatusUsuario statusUsuario) {
-		this.statusUsuario = statusUsuario;
+	public void setUpdateRegistro(Date updateRegistro) {
+		this.updateRegistro = updateRegistro;
+	}
+
+	public Date getMomentoRegistro() {
+		return momentoRegistro;
+	}
+
+	public void setMomentoRegistro(Date momentoRegistro) {
+		this.momentoRegistro = momentoRegistro;
+	}
+
+	public String getRg() {
+		return rg;
+	}
+
+	public void setRg(String rg) {
+		this.rg = rg;
 	}
 
 	public Cidade getCidade() {
@@ -142,36 +170,57 @@ public class Usuarios implements Serializable{
 		this.cpf = cpf;
 	}
 
-	public String getRg() {
-		return rg;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setRg(String rg) {
-		this.rg = rg;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public Date getMomentoRegistro() {
-		return momentoRegistro;
+	public StatusUsuario getStatusUsuario() {
+		return statusUsuario;
 	}
 
-	public void setMomentoRegistro(Date momentoRegistro) {
-		this.momentoRegistro = momentoRegistro;
+	public void setStatusUsuario(StatusUsuario statusUsuario) {
+		this.statusUsuario = statusUsuario;
 	}
 
-	public Date getUpdateRegistro() {
-		return updateRegistro;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setUpdateRegistro(Date updateRegistro) {
-		this.updateRegistro = updateRegistro;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public TipoEmitenteEnum getTipoEmitente() {
-		return tipoEmitente;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setTipoEmitente(TipoEmitenteEnum tipoEmitente) {
-		this.tipoEmitente = tipoEmitente;
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	@Override
+	public String toString() {
+		return tipoEmitente.toString();
 	}
 
 	@Override

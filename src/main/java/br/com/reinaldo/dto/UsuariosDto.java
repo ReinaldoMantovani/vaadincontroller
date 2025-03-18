@@ -1,22 +1,22 @@
 package br.com.reinaldo.dto;
 
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
 import br.com.reinaldo.entities.Cidade;
 import br.com.reinaldo.enums.StatusUsuario;
 import br.com.reinaldo.enums.TipoEmitenteEnum;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class UsuariosDto {
 	private Long id;
 	private String nome;
 	private String sobrenome;
+	private String username;
+	private String email;
+	private String password;
 	private StatusUsuario statusUsuario;
 	private Cidade cidade;
 	private String cpf;
@@ -24,28 +24,27 @@ public class UsuariosDto {
 	private Date momentoRegistro;
 	private Date updateRegistro;
 	private TipoEmitenteEnum tipoEmitente;
+	private MultipartFile profileImageUrl;
 	
 	public UsuariosDto() {
 	}
 
-	public UsuariosDto(Long id, String nome, String sobrenome, StatusUsuario statusUsuario, Cidade cidade, String cpf,
-					   String rg, Date momentoRegistro, Date updateRegistro ,TipoEmitenteEnum tipoEmitente) {
-		super();
+	public UsuariosDto(Long id, MultipartFile profileImageUrl, TipoEmitenteEnum tipoEmitente, Date updateRegistro, Date momentoRegistro, String rg, String cpf,
+					   StatusUsuario statusUsuario, Cidade cidade, String password, String email, String username, String nome, String sobrenome) {
 		this.id = id;
-		this.nome = nome;
-		this.sobrenome = sobrenome;
+		this.profileImageUrl = profileImageUrl;
+		this.tipoEmitente = tipoEmitente;
+		this.updateRegistro = updateRegistro;
+		this.momentoRegistro = momentoRegistro;
+		this.rg = rg;
+		this.cpf = cpf;
 		this.statusUsuario = statusUsuario;
 		this.cidade = cidade;
-		this.cpf = cpf;
-		this.rg = rg;
-		this.momentoRegistro = momentoRegistro;
-		this.updateRegistro = updateRegistro;
-		this.tipoEmitente = tipoEmitente;
-	}
-
-	@Override
-	public String toString() {
-		return tipoEmitente.toString();
+		this.password = password;
+		this.email = email;
+		this.username = username;
+		this.nome = nome;
+		this.sobrenome = sobrenome;
 	}
 
 	public Long getId() {
@@ -70,6 +69,30 @@ public class UsuariosDto {
 
 	public void setSobrenome(String sobrenome) {
 		this.sobrenome = sobrenome;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public StatusUsuario getStatusUsuario() {
@@ -123,25 +146,50 @@ public class UsuariosDto {
 	public TipoEmitenteEnum getTipoEmitente() {
 		return tipoEmitente;
 	}
-	
+
 	public void setTipoEmitente(TipoEmitenteEnum tipoEmitente) {
 		this.tipoEmitente = tipoEmitente;
 	}
 
+	public MultipartFile getProfileImageUrl() {
+		return profileImageUrl;
+	}
+
+	public MultipartFile setProfileImageUrl(MultipartFile profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
+        return profileImageUrl;
+    }
+
 	@Override
-	public int hashCode() {
-		return Objects.hash(id);
+	public String toString() {
+		return "UsuariosDto{" +
+				"id=" + id +
+				", nome='" + nome + '\'' +
+				", sobrenome='" + sobrenome + '\'' +
+				", username='" + username + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", statusUsuario=" + statusUsuario +
+				", cidade=" + cidade +
+				", cpf='" + cpf + '\'' +
+				", rg='" + rg + '\'' +
+				", momentoRegistro=" + momentoRegistro +
+				", updateRegistro=" + updateRegistro +
+				", tipoEmitente=" + tipoEmitente +
+				'}';
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UsuariosDto other = (UsuariosDto) obj;
-		return Objects.equals(id, other.id);
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		UsuariosDto that = (UsuariosDto) o;
+		return Objects.equals(id, that.id);
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(id);
+	}
+
+
 }

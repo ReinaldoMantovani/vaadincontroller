@@ -1,13 +1,15 @@
 package br.com.reinaldo.service;
 
+import java.io.IOException;
 import java.util.List;
 
 import br.com.reinaldo.dto.UsuariosDto;
+import br.com.reinaldo.entities.Usuarios;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface UsuariosService  {
-	UsuariosDto createUsuario(UsuariosDto usuariosDto);
+	Usuarios createUsuario(UsuariosDto usuariosDto) throws IOException;
 	
 	List<UsuariosDto> getAllUsuarios();
 	

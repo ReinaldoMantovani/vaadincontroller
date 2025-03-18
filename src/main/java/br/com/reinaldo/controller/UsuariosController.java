@@ -1,9 +1,13 @@
 package br.com.reinaldo.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import br.com.reinaldo.entities.Usuarios;
+import br.com.reinaldo.entities.mapper.UsuarioMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,17 +19,20 @@ import br.com.reinaldo.service.UsuariosService;
 public class UsuariosController {
 		
 	private final UsuariosService usuarioService;
-	
-	public UsuariosController(UsuariosService usuariosService) {
+	private final UsuarioMapper mapper;
+
+	public UsuariosController(UsuariosService usuariosService, UsuarioMapper mapper) {
 		super();
 		this.usuarioService = usuariosService;
+		this.mapper = mapper;
 	}
 	
 	//Create User
-	@PostMapping
-	public ResponseEntity<UsuariosDto> createUsuario(@Valid @RequestBody UsuariosDto usuariosDto){
-		
-		return new ResponseEntity<>(usuarioService.createUsuario(usuariosDto), HttpStatus.CREATED);
+	@PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Usuarios> createUsuario(@Valid UsuariosDto usuariosDto) throws IOException {
+		Usuarios newUsuario = usuarioService.createUsuario(usuariosDto);
+
+		return new ResponseEntity<>(newUsuario, HttpStatus.CREATED);
 	}
 	
 	@GetMapping
@@ -40,7 +47,7 @@ public class UsuariosController {
 	}
 
 	// Update Usuario
-	@PutMapping("/{id}")
+	@PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<UsuariosDto> updateUsuario(@PathVariable Long id, @RequestBody UsuariosDto usuariosDto){
 		UsuariosDto updateUsuario = usuarioService.updateUsuario(id, usuariosDto);
 		if(updateUsuario == null){

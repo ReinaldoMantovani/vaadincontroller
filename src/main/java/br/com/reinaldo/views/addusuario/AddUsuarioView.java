@@ -21,6 +21,8 @@ import com.vaadin.flow.dom.Style;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
+import java.io.IOException;
+
 @PageTitle("Cadastrar usuario")
 @Route(value = "cadastrar-usuario")
 public class AddUsuarioView extends VerticalLayout {
@@ -110,7 +112,7 @@ public class AddUsuarioView extends VerticalLayout {
 			binder.writeBean(usuario);
 			usuariosService.createUsuario(usuario);
 			clearField();
-		} catch (ValidationException e) {
+		} catch (ValidationException | IOException e) {
 			e.printStackTrace();
 		}
 	}

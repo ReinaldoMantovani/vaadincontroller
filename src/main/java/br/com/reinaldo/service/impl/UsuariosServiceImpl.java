@@ -2,10 +2,14 @@ package br.com.reinaldo.service.impl;
 
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import br.com.reinaldo.entities.mapper.UsuarioMapper;
+import br.com.reinaldo.service.ImageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.reinaldo.dto.UsuariosDto;
@@ -13,46 +17,43 @@ import br.com.reinaldo.entities.Usuarios;
 import br.com.reinaldo.execption.ResourceNotFoundException;
 import br.com.reinaldo.repository.UsuariosRepository;
 import br.com.reinaldo.service.UsuariosService;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UsuariosServiceImpl implements UsuariosService {
-	
-	
-	
+public  class UsuariosServiceImpl implements UsuariosService {
+
 	private final  UsuariosRepository usuarioRepository;
-	
-	
-	public  UsuariosServiceImpl(UsuariosRepository usuarioRepository) {
+	private final ImageService imageService;
+	private final UsuarioMapper mapper;
+
+	@Autowired
+	public  UsuariosServiceImpl(UsuariosRepository usuarioRepository, ImageService imageService, UsuarioMapper mapper) {
 		super();
 		this.usuarioRepository = usuarioRepository;
-	}
+        this.imageService = imageService;
+		this.mapper = mapper;
+    }
+
 	// Create Usuario
-	@Transactional
 	@Override
-	public UsuariosDto createUsuario(UsuariosDto usuariosDto) {
-		
-		Usuarios usuario = mapToEntity(usuariosDto);
-		Usuarios newUsuario =  usuarioRepository.save(usuario);
-		
-		//Convert entity to DTO
-		UsuariosDto usuarioResponse = mapToDto(newUsuario);
-		
-		return usuarioResponse;
-		
+	public Usuarios createUsuario(UsuariosDto usuariosDto) throws IOException {
+		String imageNew = imageService.saveUserprofileImage(null, usuariosDto.getUsername(), usuariosDto.getProfileImageUrl());
+		Usuarios usuariosEntity = mapper.mapToEntity(usuariosDto);
+		usuariosEntity.setProfileImageUrl(imageNew);
+		return usuarioRepository.save(usuariosEntity);
 	}
+
 	//Get All Users
 		public List<UsuariosDto> getAllUsuarios(){
 			List<Usuarios> usuarios = usuarioRepository.findAll();
 			
-			return usuarios.stream().map(usuario -> mapToDto(usuario)).collect(Collectors.toList());
+			return usuarios.stream().map(mapper::mapToDto).collect(Collectors.toList());
 		}
 	//Get Usuario By Id	
 		@Override
 		public UsuariosDto getUsuarioById(Long id) {
 			Usuarios usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuarios", "id", id));
 			
-			return mapToDto(usuario);
+			return mapper.mapToDto(usuario);
 		}
 
 
@@ -60,11 +61,11 @@ public class UsuariosServiceImpl implements UsuariosService {
 	public UsuariosDto updateUsuario(Long id, UsuariosDto usuariosDto) {
 		Optional<Usuarios> usuariosExist = usuarioRepository.findById(id);
 		if(usuariosExist.isPresent()){
-			Usuarios updateUsuario = mapToEntity(usuariosDto);
+			Usuarios updateUsuario = mapper.mapToEntity(usuariosDto);
 			updateUsuario.setId(id);
 			Usuarios usuarioUpdated = usuarioRepository.save(updateUsuario);
 
-			return mapToDto(usuarioUpdated);
+			return mapper.mapToDto(usuarioUpdated);
 		}
 		return null;
 	}
@@ -76,41 +77,6 @@ public class UsuariosServiceImpl implements UsuariosService {
 			
 			usuarioRepository.delete(usuario);
 		}
-	
-	private UsuariosDto mapToDto(Usuarios usuario) {
-		UsuariosDto usuariosDto = new UsuariosDto();
-		usuariosDto.setId(usuario.getId());
-		usuariosDto.setNome(usuario.getNome());
-		usuariosDto.setSobrenome(usuario.getSobrenome());
-		usuariosDto.setStatusUsuario(usuario.getStatusUsuario());
-		usuariosDto.setCidade(usuario.getCidade());
-		usuariosDto.setCpf(usuario.getCpf());
-		usuariosDto.setMomentoRegistro(usuario.getMomentoRegistro());
-		usuariosDto.setRg(usuario.getRg());
-		usuariosDto.setTipoEmitente(usuario.getTipoEmitente());
-		
-		return usuariosDto;
-	}
-	
-	private Usuarios mapToEntity(UsuariosDto usuariosDto) {
-		Usuarios usuario = new Usuarios();
-	    usuario.setNome(usuariosDto.getNome());
-	    usuario.setSobrenome(usuariosDto.getSobrenome());
-	    usuario.setStatusUsuario(usuariosDto.getStatusUsuario());
-	    usuario.setCidade(usuariosDto.getCidade());
-	    usuario.setCpf(usuariosDto.getCpf());
-	    usuario.setRg(usuariosDto.getRg());
-		usuario.setMomentoRegistro(usuariosDto.getMomentoRegistro());
-	    usuario.setTipoEmitente(usuariosDto.getTipoEmitente());
-		usuario.setTipoEmitente(usuariosDto.getTipoEmitente());
-		return usuario;
-	}
-	
-	
-	
-	
-	
-
 
 	
 }

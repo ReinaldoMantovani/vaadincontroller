@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.theme.Theme;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * The entry point of the Spring Boot application.
@@ -14,6 +15,7 @@ import com.vaadin.flow.theme.Theme;
  *
  */
 @SpringBootApplication
+@ComponentScan(basePackages = "br.com.reinaldo")
 @Theme(value = "vaddincontroller")
 public class Application implements AppShellConfigurator {
 
