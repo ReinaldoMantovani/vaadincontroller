@@ -12,6 +12,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
@@ -33,6 +34,10 @@ public class AddUsuarioView extends VerticalLayout {
 	private TextField nome;
 	@PropertyId("sobrenome")
 	private TextField sobrenome;
+	@PropertyId("username")
+	private TextField username;
+	private TextField password;
+	private EmailField email;
 	@PropertyId("statusUsuario")
 	private ComboBox<StatusUsuario> statusUsuario;
 	@PropertyId("cpf")
@@ -73,6 +78,10 @@ public class AddUsuarioView extends VerticalLayout {
 		statusUsuario = new ComboBox<>("Status do Usuario");
 		statusUsuario.setItems(StatusUsuario.values()); // Preenchendo com os valores do enum
 		statusUsuario.setItemLabelGenerator(StatusUsuario::name);
+		username = new TextField("username");
+		email = new EmailField("Email");
+		email.setErrorMessage("Coloque um email valido!");
+		password = new TextField("Password");
 		cpf = new TextField("CPF");
 		rg = new TextField("RG");
 
@@ -91,13 +100,13 @@ public class AddUsuarioView extends VerticalLayout {
 
 	private Component createFormLayout() {
 		FormLayout form = new FormLayout();
-		form.add(nome, sobrenome, statusUsuario, cpf, rg, tipoEmitenteEnum, createButtons());
+		form.add(nome, sobrenome,username, email ,password ,statusUsuario, cpf, rg, tipoEmitenteEnum, createButtons());
 		form.setColspan(nome, 1);
 		form.setResponsiveSteps(
 				// Use one column by default
 				new FormLayout.ResponsiveStep("0", 1),
 				// Use two columns, if layout's width exceeds 500px
-				new FormLayout.ResponsiveStep("500px", 2));
+				new FormLayout.ResponsiveStep("400", 3));
 		return form;
 	}
 
